@@ -24,3 +24,6 @@ function operate(operator, num1, num2) {
         return divide(num1, num2);
     }
 }
+
+const container = document.querySelector('#container');
+

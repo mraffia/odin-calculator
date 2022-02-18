@@ -1,0 +1,42 @@
+body {
+    font-family:'Courier New', Courier, monospace;
+}
+
+#container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 500px;
+    height: 500px;
+    border: 2px solid black;
+    margin-top: 16px;
+}
+
+.block {
+    flex: 1 0 auto;
+    background: lightgrey;
+    margin: 5px;
+    border-radius: 4px;
+    width: 115px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.block#display {
+    flex: 1 0 auto;
+    width: 490px;
+}
+
+.block.top-blocks {
+    flex: 1 0 auto;
+    width: 240px;
+}
+
+.block.digit {
+    background: grey;
+}
+
+.block#equals {
+    background: lightblue;
+}
+
