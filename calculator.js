@@ -14,15 +14,10 @@ function divide(num1, num2) {
 };
 
 function operate(operator, num1, num2) {
-    if (operator === 'add') {
-        return add(num1, num2);
-    } else if (operator === 'subtract') {
-        return subtract(num1, num2);
-    } else if (operator === 'multiply') {
-        return multiply(num1, num2);
-    } else if (operator === 'divide') {
-        return divide(num1, num2);
-    }
+    if (operator === 'add') return add(num1, num2);
+    else if (operator === 'subtract') return subtract(num1, num2);
+    else if (operator === 'multiply') return multiply(num1, num2);
+    else if (operator === 'divide') return divide(num1, num2);
 }
 
 // Source: https://stackoverflow.com/questions/32229667/have-max-2-decimal-places/32229831
@@ -49,53 +44,63 @@ let operatorValue = '';
 let isValue1Decimal = false;
 let isValue2Decimal = false;
 
-digits.forEach((digit) => {
-    digit.addEventListener('click', (e) => {
-        if (valueAfterEquals !== '') {
-            valueAfterEquals = '';
+function insertDigit(e) {
+    let keyOrId = '';
+    if (!e.key) keyOrId = e.target.id;
+    else if (e.key) keyOrId = e.key;
+
+    if (valueAfterEquals !== '') {
+        valueAfterEquals = '';
+        isValue1Decimal = false;
+        value1 = keyOrId;
+        display.textContent = keyOrId;
+    } else if (operatorValue === '') {
+        value1 += keyOrId;
+        display.textContent += keyOrId;
+    } else if (operatorValue !== '') {
+        value2 += keyOrId;
+        display.textContent += keyOrId;
+    }
+}
+
+function insertOperator(e) {
+    let keyOrId = '';
+    if (!e.key) keyOrId = e.target.textContent;
+    else if (e.key) keyOrId = e.key;
+
+    let keyOrIdValue = ''
+    if (keyOrId === '+') keyOrIdValue = 'add';
+    else if (keyOrId === '-') keyOrIdValue = 'subtract';
+    else if (keyOrId === '*') keyOrIdValue = 'multiply';
+    else if (keyOrId === '/') keyOrIdValue = 'divide';
+
+    if (valueAfterEquals !== '') {
+        value1 = valueAfterEquals;
+        valueAfterEquals = '';
+        if (Number(value1) % 1 === 0) {
             isValue1Decimal = false;
-            value1 = e.target.id;
-            display.textContent = e.target.id;
-        } else if (operatorValue === '') {
-            value1 += e.target.id;
-            display.textContent += e.target.id;
-        } else if (operatorValue !== '') {
-            value2 += e.target.id;
-            display.textContent += e.target.id;
         }
-    });
-});
+        operatorValue = keyOrIdValue;
+        display.textContent += ' ' + keyOrId + ' ';
+        console.log(value1);
+    } else if (value2 === '') {
+        operatorValue = keyOrIdValue;
+        display.textContent = value1 + ' ' + keyOrId + ' ';
+    } else if (value2 !== '') {
+        let total = 0;
 
-operators.forEach((operator) => {
-    operator.addEventListener('click', (e) => {
-        if (valueAfterEquals !== '') {
-            value1 = valueAfterEquals;
-            valueAfterEquals = '';
-            if (Number(value1) % 1 === 0) {
-                isValue1Decimal = false;
-            }
-            operatorValue = e.target.id;
-            display.textContent += ' ' + e.target.textContent + ' ';
-            console.log(value1);
-        } else if (value2 === '') {
-            operatorValue = e.target.id;
-            display.textContent = value1 + ' ' + e.target.textContent + ' ';
-        } else if (value2 !== '') {
-            let total = 0;
+        total = operate(operatorValue, Number(value1), Number(value2));
+        total = toFixedIfNecessary(total, 5);
 
-            total = operate(operatorValue, Number(value1), Number(value2));
-            total = toFixedIfNecessary(total, 5);
+        value1 = String(total);
+        value2 = '';
+        isValue2Decimal = false;
+        operatorValue = keyOrIdValue;
+        display.textContent = total + ' ' + keyOrId + ' ';
+    }
+}
 
-            value1 = String(total);
-            value2 = '';
-            isValue2Decimal = false;
-            operatorValue = e.target.id;
-            display.textContent = total + ' ' + e.target.textContent + ' ';
-        }
-    });
-});
-
-point.addEventListener('click', (e) => {
+function insertDecimalPoint(e) {
     if (valueAfterEquals !== '') {
         isValue1Decimal = true;
         valueAfterEquals = '';
@@ -120,9 +125,9 @@ point.addEventListener('click', (e) => {
             display.textContent += '.';
         }
     }
-});
+}
 
-equals.addEventListener('click', (e) => {
+function insertEquals(e) {
     if (value2 === '' || operatorValue === '') {} 
     else if (value2 !== '' && operatorValue !== '') {
         let total = 0;
@@ -137,18 +142,17 @@ equals.addEventListener('click', (e) => {
         operatorValue = '';
         display.textContent = total;
     }
-});
+}
 
-backspace.addEventListener('click', (e) => {
+function insertBackspace(e) {
     if (valueAfterEquals !== '') {
         valueAfterEquals = '';
         isValue1Decimal = false;
         display.textContent = '';
     } else if (operatorValue !== '') {
         if (value2 !== '') {
-            if (value2.charAt(value2.length - 1) === '.') {
-                isValue2Decimal = false;
-            }
+            if (value2.charAt(value2.length - 1) === '.') isValue2Decimal = false;
+
             value2 = value2.substring(0, value2.length - 1);
             display.textContent = display.textContent.substring(0, display.textContent.length - 1);
         } else if (value2 === '') {
@@ -157,9 +161,8 @@ backspace.addEventListener('click', (e) => {
         }
     } else if (operatorValue === '') {
         if (value1 !== '' && value1 !== 'Infinity' && value1 !== 'NaN') {
-            if (value1.charAt(value1.length - 1) === '.') {
-                isValue1Decimal = false;
-            }
+            if (value1.charAt(value1.length - 1) === '.') isValue1Decimal = false;
+
             value1 = value1.substring(0, value1.length - 1);
             display.textContent = display.textContent.substring(0, display.textContent.length - 1);
         } else if (value1 === 'Infinity' || value1 === 'NaN') {
@@ -167,7 +170,52 @@ backspace.addEventListener('click', (e) => {
             display.textContent = '';
         }
     } 
+}
+
+document.addEventListener('keydown', (e) => {
+    console.log(e.key);
+    if (
+        e.key === '0' ||
+        e.key === '1' ||
+        e.key === '2' ||
+        e.key === '3' ||
+        e.key === '4' ||
+        e.key === '5' ||
+        e.key === '6' ||
+        e.key === '7' ||
+        e.key === '8' ||
+        e.key === '9'
+    ) {
+        insertDigit(e);
+    } else if (
+        e.key === '+' ||
+        e.key === '-' ||
+        e.key === '*' ||
+        e.key === '/'
+    ) {
+        insertOperator(e);
+    } else if (e.key === '.') {
+        insertDecimalPoint(e);
+    } else if (e.key === '=' || e.key === 'Enter') {
+        insertEquals(e);
+    } else if (e.key === 'Backspace') {
+        insertBackspace(e);
+    }
 });
+
+digits.forEach((digit) => {
+    digit.addEventListener('click', insertDigit);
+});
+
+operators.forEach((operator) => {
+    operator.addEventListener('click', insertOperator);
+});
+
+point.addEventListener('click', insertDecimalPoint);
+
+equals.addEventListener('click', insertEquals);
+
+backspace.addEventListener('click', insertBackspace);
 
 clear.addEventListener('click', (e) => {
     value1 = '';
