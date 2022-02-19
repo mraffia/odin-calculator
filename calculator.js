@@ -75,7 +75,7 @@ operators.forEach((operator) => {
             let total = 0;
 
             total = operate(operatorValue, Number(value1), Number(value2));
-            total = toFixedIfNecessary(total, 3);
+            total = toFixedIfNecessary(total, 5);
 
             value1 = String(total);
             value2 = '';
@@ -91,7 +91,7 @@ equals.addEventListener('click', (e) => {
         let total = 0;
 
         total = operate(operatorValue, Number(value1), Number(value2));
-        total = toFixedIfNecessary(total, 3);
+        total = toFixedIfNecessary(total, 5);
 
         value1 = '';
         value2 = '';
@@ -99,4 +99,12 @@ equals.addEventListener('click', (e) => {
         operatorValue = '';
         display.textContent = total;
     }
+});
+
+clear.addEventListener('click', (e) => {
+    value1 = '';
+    value2 = '';
+    valueAfterEquals = '';
+    operatorValue = '';
+    display.textContent = '';
 });
