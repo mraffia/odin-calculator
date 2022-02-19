@@ -7,8 +7,9 @@ body {
     flex-wrap: wrap;
     width: 500px;
     height: 500px;
-    border: 2px solid black;
+    border: 3px solid black;
     margin-top: 16px;
+    border-radius: 4px;
 }
 
 .block {
@@ -22,9 +23,16 @@ body {
     align-items: center;
 }
 
-.block#display {
+.display {
     flex: 1 0 auto;
-    width: 490px;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    width: 450px;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    border: 2px solid black;
 }
 
 .block.top-blocks {

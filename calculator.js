@@ -26,4 +26,18 @@ function operate(operator, num1, num2) {
 }
 
 const container = document.querySelector('#container');
+const display = document.querySelector('.display');
+const backspace = document.querySelector('#backspace');
+const clear = document.querySelector('#clear');
+const digits = document.querySelectorAll('.digit');
+const operators = document.querySelectorAll('.operator');
+const equals = document.querySelector('#equals');
 
+let value = 0;
+let operation = '';
+
+digits.forEach((digit) => {
+    digit.addEventListener('click', (e) => {
+        display.textContent += e.target.id;
+    });
+})
