@@ -70,7 +70,7 @@ operators.forEach((operator) => {
             display.textContent += ' ' + e.target.textContent + ' ';
         } else if(value2 === '') {
             operatorValue = e.target.id;
-            display.textContent += ' ' + e.target.textContent + ' ';
+            display.textContent = value1 + ' ' + e.target.textContent + ' ';
         } else if(value2 !== '') {
             let total = 0;
 
