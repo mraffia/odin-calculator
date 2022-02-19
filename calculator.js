@@ -38,7 +38,6 @@ const operators = document.querySelectorAll('.operator');
 const point = document.querySelector('#point');
 const equals = document.querySelector('#equals');
 
-const negaposi = document.querySelector('#negaposi');
 const backspace = document.querySelector('#backspace');
 const clear = document.querySelector('#clear');
 
@@ -77,6 +76,7 @@ operators.forEach((operator) => {
             }
             operatorValue = e.target.id;
             display.textContent += ' ' + e.target.textContent + ' ';
+            console.log(value1);
         } else if (value2 === '') {
             operatorValue = e.target.id;
             display.textContent = value1 + ' ' + e.target.textContent + ' ';
@@ -97,11 +97,11 @@ operators.forEach((operator) => {
 
 point.addEventListener('click', (e) => {
     if (valueAfterEquals !== '') {
-        valueAfterEquals = '';
         isValue1Decimal = true;
+        valueAfterEquals = '';
         value1 = '0.';
         display.textContent = '0.';
-    } else if (operatorValue === '' && isValue1Decimal === false && value1 !== 'Infinity') {
+    } else if (operatorValue === '' && isValue1Decimal === false && value1 !== 'Infinity' && value1 !== 'NaN') {
         isValue1Decimal = true;
         if (value1.length === 0) {
             value1 += '0.';
@@ -139,10 +139,6 @@ equals.addEventListener('click', (e) => {
     }
 });
 
-negaposi.addEventListener('click', (e) => {
-    
-});
-
 backspace.addEventListener('click', (e) => {
     if (valueAfterEquals !== '') {
         valueAfterEquals = '';
@@ -155,17 +151,20 @@ backspace.addEventListener('click', (e) => {
             }
             value2 = value2.substring(0, value2.length - 1);
             display.textContent = display.textContent.substring(0, display.textContent.length - 1);
-        } else {
+        } else if (value2 === '') {
             operatorValue = '';
             display.textContent = display.textContent.substring(0, display.textContent.length - 3);
         }
     } else if (operatorValue === '') {
-        if (value1 !== '') {
+        if (value1 !== '' && value1 !== 'Infinity' && value1 !== 'NaN') {
             if (value1.charAt(value1.length - 1) === '.') {
                 isValue1Decimal = false;
             }
             value1 = value1.substring(0, value1.length - 1);
             display.textContent = display.textContent.substring(0, display.textContent.length - 1);
+        } else if (value1 === 'Infinity' || value1 === 'NaN') {
+            value1 = '';
+            display.textContent = '';
         }
     } 
 });
