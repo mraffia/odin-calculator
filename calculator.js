@@ -10,20 +10,17 @@ function multiply(num1, num2) {
 };
 
 function divide(num1, num2) {
-    if(num1 === 0 && num2 === 0) {
-        return Infinity;
-    }
     return num1 / num2;
 };
 
 function operate(operator, num1, num2) {
-    if(operator === 'add') {
+    if (operator === 'add') {
         return add(num1, num2);
-    } else if(operator === 'subtract') {
+    } else if (operator === 'subtract') {
         return subtract(num1, num2);
-    } else if(operator === 'multiply') {
+    } else if (operator === 'multiply') {
         return multiply(num1, num2);
-    } else if(operator === 'divide') {
+    } else if (operator === 'divide') {
         return divide(num1, num2);
     }
 }
@@ -36,13 +33,14 @@ function toFixedIfNecessary(value, dp) {
 const container = document.querySelector('#container');
 const display = document.querySelector('.display');
 
-const backspace = document.querySelector('#backspace');
-const clear = document.querySelector('#clear');
-
 const digits = document.querySelectorAll('.digit');
 const operators = document.querySelectorAll('.operator');
 const point = document.querySelector('#point');
 const equals = document.querySelector('#equals');
+
+const negaposi = document.querySelector('#negaposi');
+const backspace = document.querySelector('#backspace');
+const clear = document.querySelector('#clear');
 
 let value1 = '';
 let value2 = '';
@@ -54,15 +52,15 @@ let isValue2Decimal = false;
 
 digits.forEach((digit) => {
     digit.addEventListener('click', (e) => {
-        if(valueAfterEquals !== '') {
+        if (valueAfterEquals !== '') {
             valueAfterEquals = '';
             isValue1Decimal = false;
             value1 = e.target.id;
             display.textContent = e.target.id;
-        } else if(operatorValue === '') {
+        } else if (operatorValue === '') {
             value1 += e.target.id;
             display.textContent += e.target.id;
-        } else if(operatorValue !== '') {
+        } else if (operatorValue !== '') {
             value2 += e.target.id;
             display.textContent += e.target.id;
         }
@@ -71,18 +69,18 @@ digits.forEach((digit) => {
 
 operators.forEach((operator) => {
     operator.addEventListener('click', (e) => {
-        if(valueAfterEquals !== '') {
+        if (valueAfterEquals !== '') {
             value1 = valueAfterEquals;
             valueAfterEquals = '';
-            if(Number(value1) % 1 === 0) {
+            if (Number(value1) % 1 === 0) {
                 isValue1Decimal = false;
             }
             operatorValue = e.target.id;
             display.textContent += ' ' + e.target.textContent + ' ';
-        } else if(value2 === '') {
+        } else if (value2 === '') {
             operatorValue = e.target.id;
             display.textContent = value1 + ' ' + e.target.textContent + ' ';
-        } else if(value2 !== '') {
+        } else if (value2 !== '') {
             let total = 0;
 
             total = operate(operatorValue, Number(value1), Number(value2));
@@ -98,23 +96,23 @@ operators.forEach((operator) => {
 });
 
 point.addEventListener('click', (e) => {
-    if(valueAfterEquals !== '') {
+    if (valueAfterEquals !== '') {
         valueAfterEquals = '';
         isValue1Decimal = true;
         value1 = '0.';
         display.textContent = '0.';
-    } else if(operatorValue === '' && isValue1Decimal === false && value1 !== 'Infinity') {
+    } else if (operatorValue === '' && isValue1Decimal === false && value1 !== 'Infinity') {
         isValue1Decimal = true;
-        if(value1.length === 0) {
+        if (value1.length === 0) {
             value1 += '0.';
             display.textContent += '0.';
         } else {
             value1 += '.';
             display.textContent += '.';
         }
-    } else if(operatorValue !== '' && isValue2Decimal === false) {
+    } else if (operatorValue !== '' && isValue2Decimal === false) {
         isValue2Decimal = true;
-        if(value2.length === 0) {
+        if (value2.length === 0) {
             value2 += '0.';
             display.textContent += '0.';
         } else {
@@ -125,8 +123,8 @@ point.addEventListener('click', (e) => {
 });
 
 equals.addEventListener('click', (e) => {
-    if(value2 === '' || operatorValue === '') {} 
-    else if(value2 !== '' && operatorValue !== '') {
+    if (value2 === '' || operatorValue === '') {} 
+    else if (value2 !== '' && operatorValue !== '') {
         let total = 0;
 
         total = operate(operatorValue, Number(value1), Number(value2));
@@ -141,6 +139,37 @@ equals.addEventListener('click', (e) => {
     }
 });
 
+negaposi.addEventListener('click', (e) => {
+    
+});
+
+backspace.addEventListener('click', (e) => {
+    if (valueAfterEquals !== '') {
+        valueAfterEquals = '';
+        isValue1Decimal = false;
+        display.textContent = '';
+    } else if (operatorValue !== '') {
+        if (value2 !== '') {
+            if (value2.charAt(value2.length - 1) === '.') {
+                isValue2Decimal = false;
+            }
+            value2 = value2.substring(0, value2.length - 1);
+            display.textContent = display.textContent.substring(0, display.textContent.length - 1);
+        } else {
+            operatorValue = '';
+            display.textContent = display.textContent.substring(0, display.textContent.length - 3);
+        }
+    } else if (operatorValue === '') {
+        if (value1 !== '') {
+            if (value1.charAt(value1.length - 1) === '.') {
+                isValue1Decimal = false;
+            }
+            value1 = value1.substring(0, value1.length - 1);
+            display.textContent = display.textContent.substring(0, display.textContent.length - 1);
+        }
+    } 
+});
+
 clear.addEventListener('click', (e) => {
     value1 = '';
     value2 = '';
@@ -150,4 +179,3 @@ clear.addEventListener('click', (e) => {
     isValue2Decimal = false;
     display.textContent = '';
 });
-
